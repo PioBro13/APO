@@ -52,6 +52,12 @@
               <text value="Negation"/>
             </properties>
           </component>
+          <component id="5def0" class="javax.swing.JButton" binding="thresholdingButton">
+            <constraints/>
+            <properties>
+              <text value="Thresholding"/>
+            </properties>
+          </component>
         </children>
       </toolbar>
     </children>

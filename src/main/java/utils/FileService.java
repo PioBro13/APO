@@ -84,8 +84,7 @@ public class FileService {
     }
 
     public static ArrayList<int[]> tableLUT(File image){
-        String path = image.getAbsolutePath();
-        Mat pix = Imgcodecs.imread(path);
+        Mat pix = Imgcodecs.imread(image.getAbsolutePath());
         int ch = pix.channels();
         int rows = pix.rows();
         int cols = pix.cols();

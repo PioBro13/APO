@@ -1,7 +1,9 @@
 package form;
 
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import utils.FileService;
-import utils.Histogram;
+import utils.HistogramManual;
 import utils.ImageOperations;
 
 import javax.swing.*;
@@ -18,6 +20,7 @@ public class AppForm extends JFrame{
     private JButton duplicateButton;
     private JButton saveFileButton;
     private JButton negationButton;
+    private JButton thresholdingButton;
     private File lastOpenedFile;
 
     public AppForm(String title){
@@ -42,11 +45,9 @@ public class AppForm extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 EventQueue.invokeLater(() -> {
-                    try {
-                        new Histogram().display(openFile());
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
+                    //Better histogram
+                    //new Histogram().display(openFile());
+                    new HistogramManual().initialize(openFile());
                 });
             }
         });
@@ -80,6 +81,12 @@ public class AppForm extends JFrame{
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
+            }
+        });
+        thresholdingButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
             }
         });
     }
