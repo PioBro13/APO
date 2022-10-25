@@ -91,7 +91,20 @@ public class AppForm extends JFrame{
         thresholdingButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                try {
+                    int thresholdLevel = thresholdLevel();
 
+                    if (thresholdLevel < -1 || thresholdLevel > 255) {
+                        JOptionPane.showMessageDialog(null, "Wrong threshold given!\nPlease enter number greater or equal than 0 and smaller or equal than 255",
+                                "Wrong threshold level", JOptionPane.ERROR_MESSAGE);
+                    }else if(thresholdLevel == -1){
+                        System.out.println("Wrong data type");
+                    }else{
+                        ImageOperations.pictureThresholding(openFile(), thresholdLevel,isBinary());
+                    }
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
     }
@@ -107,6 +120,27 @@ public class AppForm extends JFrame{
             System.out.println("File not found");
             return null;
         }
+    }
+
+    public int thresholdLevel(){
+        int givenLevel = -1;
+        try {
+             givenLevel = Integer.parseInt(JOptionPane.showInputDialog("Enter thresholding level"));
+        } catch (NumberFormatException e){
+            JOptionPane.showMessageDialog(null, "Incorrect data type!\nPlease enter integer number.",
+                    "Wrong threshold level", JOptionPane.ERROR_MESSAGE);
+        }
+        System.out.println(givenLevel);
+        return givenLevel;
+    }
+
+    public boolean isBinary(){
+        int n = JOptionPane.showConfirmDialog(
+                this,
+                "Do you want to make binary thresholding?",
+                "Binary thresholding",
+                JOptionPane.YES_NO_OPTION);
+        return n == 0;
     }
 
 }

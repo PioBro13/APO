@@ -28,4 +28,31 @@ public class ImageOperations {
         }
         openImage(matToBuffered(matrix));
     }
+
+    public static void pictureThresholding(File image,int threshold,  boolean modeIsBinary) throws IOException {
+        Mat img = Imgcodecs.imread(image.getAbsolutePath());
+        Mat result = img.clone();
+        int rows = img.rows();
+        int cols = img.cols();
+
+        for(int i = 0; i < rows; ++i) {
+            for(int j = 0; j < cols; ++j) {
+                double[] data = img.get(i, j);
+                if (!modeIsBinary) {
+                    data[0] = data[0] > (double)threshold ? data[0] : 0.0D;
+                    data[1] = data[1] > (double)threshold ? data[1] : 0.0D;
+                    data[2] = data[2] > (double)threshold ? data[2] : 0.0D;
+                } else {
+                    data[0] = data[0] > (double)threshold ? 255.0D : 0.0D;
+                    data[1] = data[1] > (double)threshold ? 255.0D : 0.0D;
+                    data[2] = data[2] > (double)threshold ? 255.0D : 0.0D;
+                }
+
+                result.put(i, j, data);
+            }
+        }
+
+        openImage(matToBuffered(result));
+    }
+
 }

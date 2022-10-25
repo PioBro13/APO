@@ -127,5 +127,10 @@ public class FileService {
         return rgb;
     }
 
+    public static JSlider thresholdSlider(){
+        JSlider thresholdLevel = new JSlider(0,256,0);
+        return thresholdLevel;
+    }
+
 
 }
