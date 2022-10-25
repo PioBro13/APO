@@ -130,7 +130,6 @@ public class AppForm extends JFrame{
             JOptionPane.showMessageDialog(null, "Incorrect data type!\nPlease enter integer number.",
                     "Wrong threshold level", JOptionPane.ERROR_MESSAGE);
         }
-        System.out.println(givenLevel);
         return givenLevel;
     }
 
