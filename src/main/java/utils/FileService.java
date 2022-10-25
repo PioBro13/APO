@@ -83,16 +83,16 @@ public class FileService {
         return bufImage;
     }
 
-    public static ArrayList<int[]> tableLUT(File image){
+    public static ArrayList<double[]> tableLUT(File image){
         Mat pix = Imgcodecs.imread(image.getAbsolutePath());
         int ch = pix.channels();
         int rows = pix.rows();
         int cols = pix.cols();
         System.out.println("Number of channels: " + ch);
-        int[] k = new int[256];
-        int[] r = new int[256];
-        int[] g = new int[256];
-        int[] b = new int[256];
+        double[] k = new double[256];
+        double[] r = new double[256];
+        double[] g = new double[256];
+        double[] b = new double[256];
         int i;
         int j;
         double[] data;
@@ -116,7 +116,7 @@ public class FileService {
             }
         }
 
-        ArrayList<int[]> rgb = new ArrayList();
+        ArrayList<double[]> rgb = new ArrayList();
         rgb.add(k);
         if (ch > 1) {
             rgb.add(r);

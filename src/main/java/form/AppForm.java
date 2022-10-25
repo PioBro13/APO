@@ -3,7 +3,7 @@ package form;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import utils.FileService;
-import utils.HistogramManual;
+import utils.Histogram;
 import utils.ImageOperations;
 
 import javax.swing.*;
@@ -46,8 +46,13 @@ public class AppForm extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 EventQueue.invokeLater(() -> {
                     //Better histogram
-                    //new Histogram().display(openFile());
-                    new HistogramManual().initialize(openFile());
+                    try {
+                        new Histogram().display(openFile());
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    // HistogramManual histogram = new HistogramManual(openFile());
+                  //histogram.initialize();
                 });
             }
         });

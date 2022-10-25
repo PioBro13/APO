@@ -17,26 +17,29 @@ import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Histogram {
     private static final int BINS = 256;
     private BufferedImage image;
+    private File imageNotBuffered;
     private HistogramDataset dataset;
     private XYBarRenderer renderer;
 
-    private ChartPanel createChartPanel() {
+    private ChartPanel createChartPanel(){
         // dataset
         dataset = new HistogramDataset();
-        Raster raster = image.getRaster();
-        final int w = image.getWidth();
-        final int h = image.getHeight();
-        double[] r = new double[w * h];
-        r = raster.getSamples(0, 0, w, h, 0, r);
-        dataset.addSeries("Red", r, BINS);
-        r = raster.getSamples(0, 0, w, h, 1, r);
-        dataset.addSeries("Green", r, BINS);
-        r = raster.getSamples(0, 0, w, h, 2, r);
-        dataset.addSeries("Blue", r, BINS);
+        //Raster raster = image.getRaster();
+        ArrayList<double[]> rgbArray  = FileService.tableLUT(imageNotBuffered);
+       // final int w = image.getWidth();
+       // final int h = image.getHeight();
+        //double[] r = new double[w * h];
+        //r = raster.getSamples(0, 0, w, h, 0, r);
+        dataset.addSeries("Red", rgbArray.get(0), BINS);
+        //r = raster.getSamples(0, 0, w, h, 1, r);
+        dataset.addSeries("Green", rgbArray.get(1), BINS);
+        //r = raster.getSamples(0, 0, w, h, 2, r);
+        dataset.addSeries("Blue", rgbArray.get(2), BINS);
         // chart
         JFreeChart chart = ChartFactory.createHistogram("Histogram", "Value",
                 "Count", dataset, PlotOrientation.VERTICAL, true, true, false);
@@ -87,6 +90,7 @@ public class Histogram {
     }
 
     public void display(File analysedImage) throws IOException {
+        this.imageNotBuffered = analysedImage;
         this.image = FileService.imageToBuffered(analysedImage);
         JFrame f = new JFrame("Histogram");
         f.add(createChartPanel());
