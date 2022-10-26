@@ -10,7 +10,9 @@ import java.util.ArrayList;
 
 public class HistogramOperations {
 
-    public static Mat histogramStretch(ArrayList<int[]> histData, Mat originalPixels) {
+    public static Mat histogramStretch(File image) {
+        ArrayList<int[]> histData = FileService.intTableLUT(image);
+        Mat originalPixels = Imgcodecs.imread(image.getAbsolutePath());
         Mat resultMatrix = originalPixels.clone();
         int[] minRGBK = new int[]{0, 0, 0, 0};
         int[] maxRGBK = new int[]{255, 255, 255, 255};
@@ -90,7 +92,6 @@ public class HistogramOperations {
 
         for(int i = 0; i < distribution.length; ++i) {
             LUT[i] = (int)(255.0D * ((distribution[i] - d0) / (1.0D - d0)));
-            System.out.println(i + " " + distribution[i] + " " + LUT[i]);
         }
 
         return LUT;
@@ -98,12 +99,12 @@ public class HistogramOperations {
 
     public static HistogramOperations.Pair findMinMax(int[] vector) {
         int i;
-        for(i = 0; vector[i] == 0.0D && i + 1 < vector.length - 1; ++i) {
+        for(i = 0; vector[i] == 0; ++i) {
         }
 
         int min = i;
 
-        for(i = vector.length - 1; vector[i] == 0.0D && i - 1 > 0; --i) {
+        for(i = vector.length - 1; vector[i] == 0; --i) {
         }
 
         return new HistogramOperations.Pair(vector[min], vector[i]);

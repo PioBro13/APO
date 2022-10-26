@@ -22,6 +22,7 @@ public class AppForm extends JFrame{
     private JButton negationButton;
     private JButton thresholdingButton;
     private JButton equalizedHistogramButton;
+    private JButton stretchHistogramButton;
     private File lastOpenedFile;
 
     public AppForm(String title){
@@ -115,6 +116,18 @@ public class AppForm extends JFrame{
                     File file = openFile();
                     Mat equalizedMat = HistogramOperations.histogramEqualize(file);
                     new Histogram().display(FileService.matToBuffered(equalizedMat),FileService.tableLUT(equalizedMat));
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        stretchHistogramButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    File file = openFile();
+                    Mat stretchedMat = HistogramOperations.histogramStretch(file);
+                    new Histogram().display(FileService.matToBuffered(stretchedMat),FileService.tableLUT(stretchedMat));
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
