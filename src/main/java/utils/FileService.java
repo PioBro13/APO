@@ -85,6 +85,15 @@ public class FileService {
 
     public static ArrayList<double[]> tableLUT(File image){
         Mat pix = Imgcodecs.imread(image.getAbsolutePath());
+        return calculateLUT(pix);
+    }
+
+    public static ArrayList<double[]> tableLUT(Mat image){
+        Mat pix = image;
+        return calculateLUT(pix);
+    }
+
+    private static ArrayList<double[]> calculateLUT(Mat pix) {
         int ch = pix.channels();
         int rows = pix.rows();
         int cols = pix.cols();
@@ -126,6 +135,51 @@ public class FileService {
 
         return rgb;
     }
+
+    public static ArrayList<int[]> intTableLUT(File image){
+        Mat pix = Imgcodecs.imread(image.getAbsolutePath());
+        int ch = pix.channels();
+        int rows = pix.rows();
+        int cols = pix.cols();
+        System.out.println("Number of channels: " + ch);
+        int[] k = new int[256];
+        int[] r = new int[256];
+        int[] g = new int[256];
+        int[] b = new int[256];
+        int i;
+        int j;
+        double[] data;
+        if (ch > 1) {
+            for(i = 0; i < rows; ++i) {
+                for(j = 0; j < cols; ++j) {
+                    data = pix.get(i, j);
+                    ++r[(int)data[2]];
+                    ++g[(int)data[1]];
+                    ++b[(int)data[0]];
+                    double k_value = (data[0] + data[1] + data[2]) / 3.0D;
+                    ++k[(int)k_value];
+                }
+            }
+        } else {
+            for(i = 0; i < rows; ++i) {
+                for(j = 0; j < cols; ++j) {
+                    data = pix.get(i, j);
+                    ++k[(int)data[0]];
+                }
+            }
+        }
+
+        ArrayList<int[]> rgb = new ArrayList();
+        rgb.add(k);
+        if (ch > 1) {
+            rgb.add(r);
+            rgb.add(g);
+            rgb.add(b);
+        }
+
+        return rgb;
+    }
+
 
     public static JSlider thresholdSlider(){
         JSlider thresholdLevel = new JSlider(0,256,0);

@@ -1,9 +1,9 @@
 package form;
 
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import org.opencv.core.Mat;
 import utils.FileService;
 import utils.Histogram;
+import utils.HistogramOperations;
 import utils.ImageOperations;
 
 import javax.swing.*;
@@ -21,6 +21,7 @@ public class AppForm extends JFrame{
     private JButton saveFileButton;
     private JButton negationButton;
     private JButton thresholdingButton;
+    private JButton equalizedHistogramButton;
     private File lastOpenedFile;
 
     public AppForm(String title){
@@ -102,6 +103,18 @@ public class AppForm extends JFrame{
                     }else{
                         ImageOperations.pictureThresholding(openFile(), thresholdLevel,isBinary());
                     }
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        equalizedHistogramButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    File file = openFile();
+                    Mat equalizedMat = HistogramOperations.histogramEqualize(file);
+                    new Histogram().display(FileService.matToBuffered(equalizedMat),FileService.tableLUT(equalizedMat));
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }

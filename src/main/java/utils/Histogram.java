@@ -26,11 +26,11 @@ public class Histogram {
     private HistogramDataset dataset;
     private XYBarRenderer renderer;
 
-    private ChartPanel createChartPanel(){
+    private ChartPanel createChartPanel(ArrayList<double[]> rgb){
         // dataset
         dataset = new HistogramDataset();
         //Raster raster = image.getRaster();
-        ArrayList<double[]> rgbArray  = FileService.tableLUT(imageNotBuffered);
+        ArrayList<double[]> rgbArray  = rgb;
        // final int w = image.getWidth();
        // final int h = image.getHeight();
         //double[] r = new double[w * h];
@@ -93,7 +93,17 @@ public class Histogram {
         this.imageNotBuffered = analysedImage;
         this.image = FileService.imageToBuffered(analysedImage);
         JFrame f = new JFrame("Histogram");
-        f.add(createChartPanel());
+        f.add(createChartPanel(FileService.tableLUT(analysedImage)));
+        f.add(createControlPanel(), BorderLayout.SOUTH);
+        f.add(new JLabel(new ImageIcon(image)), BorderLayout.WEST);
+        f.pack();
+        f.setLocationRelativeTo(null);
+        f.setVisible(true);
+    }
+    public void display(BufferedImage analysedImage, ArrayList<double[]> imageLUT) throws IOException {
+        this.image = analysedImage;
+        JFrame f = new JFrame("Histogram");
+        f.add(createChartPanel(imageLUT));
         f.add(createControlPanel(), BorderLayout.SOUTH);
         f.add(new JLabel(new ImageIcon(image)), BorderLayout.WEST);
         f.pack();
