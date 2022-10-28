@@ -94,6 +94,7 @@ public class AppForm extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    File file = openFile();
                     int thresholdLevel = thresholdLevel();
 
                     if (thresholdLevel < -1 || thresholdLevel > 255) {
@@ -102,7 +103,7 @@ public class AppForm extends JFrame{
                     }else if(thresholdLevel == -1){
                         System.out.println("Wrong data type");
                     }else{
-                        ImageOperations.pictureThresholding(openFile(), thresholdLevel,isBinary());
+                        ImageOperations.pictureThresholding(file, thresholdLevel,isBinary());
                     }
                 } catch (IOException ex) {
                     ex.printStackTrace();
