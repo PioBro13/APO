@@ -52,7 +52,7 @@ public class ImageOperations {
             }
         }
 
-        openImage(matToBuffered(result));
+        new Histogram().display(matToBuffered(result));
     }
 
 }

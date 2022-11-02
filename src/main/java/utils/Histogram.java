@@ -9,6 +9,7 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.StandardXYBarPainter;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.data.statistics.HistogramDataset;
+import org.opencv.core.Mat;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,20 +27,20 @@ public class Histogram {
     private HistogramDataset dataset;
     private XYBarRenderer renderer;
 
-    private ChartPanel createChartPanel(ArrayList<double[]> rgb){
+    private ChartPanel createChartPanel(){
         // dataset
         dataset = new HistogramDataset();
-        //Raster raster = image.getRaster();
-        ArrayList<double[]> rgbArray  = rgb;
-       // final int w = image.getWidth();
-       // final int h = image.getHeight();
-        //double[] r = new double[w * h];
-        //r = raster.getSamples(0, 0, w, h, 0, r);
-        dataset.addSeries("Red", rgbArray.get(0), BINS);
-        //r = raster.getSamples(0, 0, w, h, 1, r);
-        dataset.addSeries("Green", rgbArray.get(1), BINS);
-        //r = raster.getSamples(0, 0, w, h, 2, r);
-        dataset.addSeries("Blue", rgbArray.get(2), BINS);
+        Raster raster = image.getRaster();
+        //ArrayList<double[]> rgbArray  = rgb;
+        final int w = image.getWidth();
+        final int h = image.getHeight();
+        double[] r = new double[w * h];
+        r = raster.getSamples(0, 0, w, h, 0, r);
+        dataset.addSeries("Red", r, BINS);
+        r = raster.getSamples(0, 0, w, h, 1, r);
+        dataset.addSeries("Green",r, BINS);
+        r = raster.getSamples(0, 0, w, h, 2, r);
+        dataset.addSeries("Blue", r, BINS);
         // chart
         JFreeChart chart = ChartFactory.createHistogram("Histogram", "Value",
                 "Count", dataset, PlotOrientation.VERTICAL, true, true, false);
@@ -93,7 +94,18 @@ public class Histogram {
         this.imageNotBuffered = analysedImage;
         this.image = FileService.imageToBuffered(analysedImage);
         JFrame f = new JFrame("Histogram");
-        f.add(createChartPanel(FileService.tableLUT(analysedImage)));
+        f.add(createChartPanel());
+        f.add(createControlPanel(), BorderLayout.SOUTH);
+        f.add(new JLabel(new ImageIcon(image)), BorderLayout.WEST);
+        f.pack();
+        f.setLocationRelativeTo(null);
+        f.setVisible(true);
+    }
+    public void display(BufferedImage analysedImage) throws IOException {
+
+        this.image = analysedImage;
+        JFrame f = new JFrame("Histogram");
+        f.add(createChartPanel());
         f.add(createControlPanel(), BorderLayout.SOUTH);
         f.add(new JLabel(new ImageIcon(image)), BorderLayout.WEST);
         f.pack();
@@ -103,7 +115,7 @@ public class Histogram {
     public void display(BufferedImage analysedImage, ArrayList<double[]> imageLUT) throws IOException {
         this.image = analysedImage;
         JFrame f = new JFrame("Histogram");
-        f.add(createChartPanel(imageLUT));
+        f.add(createChartPanel());
         f.add(createControlPanel(), BorderLayout.SOUTH);
         f.add(new JLabel(new ImageIcon(image)), BorderLayout.WEST);
         f.pack();

@@ -60,7 +60,7 @@ public class HistogramOperations {
             distribution[i] = (double)histogram[i] + distribution[i - 1];
         }
 
-        for(i = 0; i < distribution.length; ++i) {
+        for(i = 1; i < distribution.length; ++i) {
             distribution[i] /= (double)pixelCount;
         }
 
@@ -72,8 +72,8 @@ public class HistogramOperations {
         int rows = pixels.rows();
         int cols = pixels.cols();
 
-        for(int i = 0; i < rows; ++i) {
-            for(int j = 0; j < cols; ++j) {
+        for(int i = 1; i < rows; ++i) {
+            for(int j = 1; j < cols; ++j) {
                 double[] data = pixels.get(i, j);
                 data[0] = (double)((int[])equalizationLUTs.get(2))[(int)data[0]];
                 data[1] = (double)((int[])equalizationLUTs.get(1))[(int)data[1]];
@@ -90,7 +90,7 @@ public class HistogramOperations {
         HistogramOperations.Pair minMax = findMinMax(distribution);
         double d0 = (Double)minMax.min;
 
-        for(int i = 0; i < distribution.length; ++i) {
+        for(int i = 1; i < distribution.length; ++i) {
             LUT[i] = (int)(255.0D * ((distribution[i] - d0) / (1.0D - d0)));
         }
 
