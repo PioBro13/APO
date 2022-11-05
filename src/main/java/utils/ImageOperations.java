@@ -1,8 +1,11 @@
 package utils;
 
 import org.opencv.core.Mat;
+import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -53,6 +56,14 @@ public class ImageOperations {
         }
 
         new Histogram().display(matToBuffered(result));
+    }
+
+    public static BufferedImage resizeImage(BufferedImage image, int sizeChange) throws IOException {
+        Mat source = FileService.BufferedImage2Mat(image);
+        Mat resized = new Mat();
+        Size size = new Size(sizeChange,sizeChange);
+        Imgproc.resize(source,resized,size);
+        return FileService.matToBuffered(resized);
     }
 
 }

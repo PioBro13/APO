@@ -7,12 +7,11 @@ import org.opencv.imgcodecs.Imgcodecs;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 
 public class FileService {
@@ -22,11 +21,25 @@ public class FileService {
         BufferedImage bufImage = imageToBuffered(image);
         //Instantiate JFrame
         JFrame frame = new JFrame();
+        frame.setLayout(new FlowLayout(FlowLayout.CENTER));
+        JSlider jSlider = resizeSlider();
+        JLabel shownImage = new JLabel(new ImageIcon(bufImage));
         //Set Content to the JFrame
-        frame.getContentPane().add(new JLabel(new ImageIcon(bufImage)));
+        frame.getContentPane().add(jSlider);
+        frame.getContentPane().add(shownImage);
         frame.pack();
         frame.setVisible(true);
         System.out.println("Image Loaded");
+        jSlider.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                System.out.println("Slider1: " + jSlider.getValue());
+              /*  try {
+                   bufImage =  ImageOperations.resizeImage(bufImage, jSlider.getValue());
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                } */
+            }
+        });
     }
 
     public static void openImage(BufferedImage image) throws IOException {
@@ -51,6 +64,13 @@ public class FileService {
         InputStream in = new ByteArrayInputStream(byteArray);
         BufferedImage bufImage = ImageIO.read(in);
         return bufImage;
+    }
+
+    public static Mat BufferedImage2Mat(BufferedImage image) throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ImageIO.write(image, "jpg", byteArrayOutputStream);
+        byteArrayOutputStream.flush();
+        return Imgcodecs.imdecode(new MatOfByte(byteArrayOutputStream.toByteArray()), Imgcodecs.IMREAD_LOAD_GDAL);
     }
 
     public static void saveFile(File image) throws IOException {
@@ -184,6 +204,20 @@ public class FileService {
     public static JSlider thresholdSlider(){
         JSlider thresholdLevel = new JSlider(0,256,0);
         return thresholdLevel;
+    }
+
+    public static JSlider resizeSlider(){
+        JSlider jSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
+        jSlider.setPaintTicks(true);
+        jSlider.setMajorTickSpacing(25);
+        jSlider.setMinorTickSpacing(5);
+        jSlider.setPaintTicks(true);
+        jSlider.setPaintLabels(true);
+        jSlider.setBorder(
+                BorderFactory.createEmptyBorder(0,0,100,0));
+        Font font = new Font("Serif", Font.ITALIC, 15);
+        jSlider.setFont(font);
+        return jSlider;
     }
 
 
