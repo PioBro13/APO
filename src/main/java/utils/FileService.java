@@ -202,22 +202,26 @@ public class FileService {
 
 
     public static JSlider thresholdSlider(){
-        JSlider thresholdLevel = new JSlider(0,256,0);
-        return thresholdLevel;
+        JSlider jSlider = new JSlider(JSlider.HORIZONTAL, 0, 256, 0);
+        return getjSlider(jSlider);
     }
 
-    public static JSlider resizeSlider(){
-        JSlider jSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
+    private static JSlider getjSlider(JSlider jSlider) {
         jSlider.setPaintTicks(true);
         jSlider.setMajorTickSpacing(25);
         jSlider.setMinorTickSpacing(5);
         jSlider.setPaintTicks(true);
         jSlider.setPaintLabels(true);
         jSlider.setBorder(
-                BorderFactory.createEmptyBorder(0,0,100,0));
+                BorderFactory.createEmptyBorder(0,0,256,0));
         Font font = new Font("Serif", Font.ITALIC, 15);
         jSlider.setFont(font);
         return jSlider;
+    }
+
+    public static JSlider resizeSlider(){
+        JSlider jSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
+        return getjSlider(jSlider);
     }
 
 
