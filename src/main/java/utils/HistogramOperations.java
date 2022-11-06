@@ -8,6 +8,7 @@ import java.awt.image.DataBufferByte;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class HistogramOperations {
 
@@ -56,25 +57,42 @@ public class HistogramOperations {
                     ++r[ch];
                 }
                 right[ch][z] = r[ch];
-                newValue[ch][z] = (left[ch][z] + right[ch][z]) / 2;
+                newValue[ch][z] = right[ch][z] - left[ch][z];
             }
         }
 
         int width = bufferedImage.getWidth();
         int height = bufferedImage.getHeight();
+        Random random = new Random();
 
         final byte[] a = ((DataBufferByte) bufferedImage.getRaster().getDataBuffer()).getData();
         for (int p = 0; p < width*height*histogram.getChannels(); p+=histogram.getChannels() ) {
 
             for (int ch = 0;ch<histogram.getChannels();++ch) {
                 int chInv = histogram.getChannels()-1-ch;
-                if (left[ch][a[p+chInv] & 0xFF] == right[ch][a[p+chInv] & 0xFF]) a[p+chInv] = (byte) (left[ch][a[p+chInv] & 0xFF] & 0xFF);
-                else a[p+chInv] = (byte) (newValue[ch][a[p+chInv] & 0xFF] & 0xFF);
+                int i = a[p+chInv] & 0xFF;
+                int avg = getAverage(a, width, height, histogram.getChannels(), p);
+                if(avg < left[ch][i]) a[p+chInv] = (byte) (left[ch][i] & 0xFF);
+                else if(avg > right[ch][i]) a[p+chInv] = (byte) (right[ch][i] & 0xFF);
+                else a[p+chInv] = (byte) (avg & 0xFF);
             }
         }
 
-        return (bufferedImage);
+        return bufferedImage;
 
+    }
+
+    private static int getAverage(byte[] a, int width, int height, int ch, int p) {
+        if (p<width*ch || p>a.length-width*ch-3 || p%width*ch <ch || p%width*ch>width*ch-ch) return a[p] & 0xFF;
+        int sum;
+        try {
+            sum = a[p-((width+1)*ch)] & 0xFF + a[p-((width)*ch)] & 0xFF + a[p-((width-1)*ch)] & 0xFF +
+                    a[p-ch] & 0xFF + a[p+ch] & 0xFF +
+                    a[p+((width+1)*ch)] & 0xFF + a[p+((width)*ch)] & 0xFF + a[p+((width-1)*ch)] & 0xFF;
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return a[p] & 0xFF;
+        }
+        return sum/8;
     }
 
     public static double[] getDistribution(int[] histogram, int pixelCount) {
