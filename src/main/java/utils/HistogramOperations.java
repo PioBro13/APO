@@ -4,6 +4,7 @@ import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,17 +38,42 @@ public class HistogramOperations {
         return resultMatrix;
     }
 
-    public static Mat histogramEqualize(File image) throws IOException {
-        ArrayList<int[]> histData = FileService.intTableLUT(image);
-        Mat originalPixels = Imgcodecs.imread(image.getAbsolutePath());
-        ArrayList<int[]> equalizationLUTs = new ArrayList();
+    public static BufferedImage histogramEqualize(File image) throws IOException {
+        BufferedImage bufferedImage = FileService.imageToBuffered(image);
+        Histogram2 histogram = new Histogram2(bufferedImage);
+        int h[][] = histogram.getRGB();
+        int r[] = new int[3], hint[] = new int[3];
+        int left[][] = new int[3][histogram.getLevels()];
+        int right[][] = new int[3][histogram.getLevels()];
+        int newValue[][] = new int[3][histogram.getLevels()];
 
-        for(int i = 1; i < 4; ++i) {
-            double[] distribution = getDistribution(histData.get(i), originalPixels.rows() * originalPixels.cols());
-            equalizationLUTs.add(makeEqualizationLUT(distribution));
+        for (int z = 0; z<histogram.getLevels(); ++z) {
+            for (int ch = 0;ch<3;++ch) {
+                left[ch][z] = r[ch];
+                hint[ch] += h[ch][z];
+                while (hint[ch] > histogram.getHRGBAvg()[ch]) {
+                    hint[ch] -= histogram.getHRGBAvg()[ch];
+                    ++r[ch];
+                }
+                right[ch][z] = r[ch];
+                newValue[ch][z] = (left[ch][z] + right[ch][z]) / 2;
+            }
         }
 
-        return applyLUT(originalPixels, equalizationLUTs);
+        int width = bufferedImage.getWidth();
+        int height = bufferedImage.getHeight();
+
+        final byte[] a = ((DataBufferByte) bufferedImage.getRaster().getDataBuffer()).getData();
+        for (int p = 0; p < width*height*histogram.getChannels(); p+=histogram.getChannels() ) {
+
+            for (int ch = 0;ch<histogram.getChannels();++ch) {
+                int chInv = histogram.getChannels()-1-ch;
+                if (left[ch][a[p+chInv] & 0xFF] == right[ch][a[p+chInv] & 0xFF]) a[p+chInv] = (byte) (left[ch][a[p+chInv] & 0xFF] & 0xFF);
+                else a[p+chInv] = (byte) (newValue[ch][a[p+chInv] & 0xFF] & 0xFF);
+            }
+        }
+
+        return (bufferedImage);
 
     }
 

@@ -50,7 +50,7 @@ public class ImageOperations {
                     data[1] = data[1] > (double)threshold ? 255.0D : 0.0D;
                     data[2] = data[2] > (double)threshold ? 255.0D : 0.0D;
                 }
-
+                System.out.println(data[0]);
                 result.put(i, j, data);
             }
         }

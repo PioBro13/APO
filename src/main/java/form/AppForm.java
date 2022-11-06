@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -115,8 +116,8 @@ public class AppForm extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 try {
                     File file = openFile();
-                    Mat equalizedMat = HistogramOperations.histogramEqualize(file);
-                    new Histogram().display(FileService.matToBuffered(equalizedMat),FileService.tableLUT(equalizedMat));
+                    BufferedImage equalizedImage = HistogramOperations.histogramEqualize(file);
+                    new Histogram().display(equalizedImage);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
