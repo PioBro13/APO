@@ -11,10 +11,16 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.DataBufferByte;
+import java.awt.image.WritableRaster;
 import java.io.*;
 import java.util.ArrayList;
 
 public class FileService {
+    private static final double rPerc = 0.2;
+    private static final double gPerc = 0.6;
+    private static final double bPerc = 0.2;
 
 
     public static void openImage(File image) throws IOException {
@@ -224,5 +230,31 @@ public class FileService {
         return getjSlider(jSlider);
     }
 
+    public static BufferedImage rgbToGrayscale(BufferedImage bufferedImage){
+        int channels = bufferedImage.getColorModel().getNumComponents();
+        if (channels==1) return bufferedImage;
+
+        int width = bufferedImage.getWidth();
+        int height = bufferedImage.getHeight();
+        BufferedImage grayscaleImage = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_GRAY);
+
+        final byte[] a = ((DataBufferByte) bufferedImage.getRaster().getDataBuffer()).getData();
+        final byte[] gray = ((DataBufferByte) grayscaleImage.getRaster().getDataBuffer()).getData();
+        for (int p = 0; p < width * height * channels; p += channels) {
+            double r = a[p+2] & 0xFF;
+            double g = a[p+1] & 0xFF;
+            double b = a[p] & 0xFF;
+            gray[p/channels] = (byte) Math.round((r * rPerc) + (g * gPerc) + (b * bPerc));
+
+        }
+        return grayscaleImage;
+    }
+
+    public static BufferedImage deepCopy(BufferedImage bi) {
+        ColorModel cm = bi.getColorModel();
+        boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+        WritableRaster raster = bi.copyData(null);
+        return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+    }
 
 }

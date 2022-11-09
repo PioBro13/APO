@@ -63,7 +63,6 @@ public class HistogramOperations {
 
         int width = bufferedImage.getWidth();
         int height = bufferedImage.getHeight();
-        Random random = new Random();
 
         final byte[] a = ((DataBufferByte) bufferedImage.getRaster().getDataBuffer()).getData();
         for (int p = 0; p < width*height*histogram.getChannels(); p+=histogram.getChannels() ) {
