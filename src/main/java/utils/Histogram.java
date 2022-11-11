@@ -31,7 +31,6 @@ public class Histogram {
         // dataset
         dataset = new HistogramDataset();
         Raster raster = image.getRaster();
-        //ArrayList<double[]> rgbArray  = rgb;
         final int w = image.getWidth();
         final int h = image.getHeight();
         double[] r = new double[w * h];

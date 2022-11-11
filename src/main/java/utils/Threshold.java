@@ -3,15 +3,16 @@ package utils;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSlider;
+import java.io.IOException;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import nu.pattern.OpenCV;
 import org.opencv.core.Core;
@@ -83,7 +84,11 @@ public class Threshold {
         sliderThreshValue.setPaintLabels(true);
         sliderPanel.add(sliderThreshValue);
         // Create Text field for threshold value
-
+        sliderPanel.add(new JLabel("Threshold level"));
+        JTextField textField = new JTextField(5);
+        sliderPanel.add(textField);
+        JButton applyThresholdButton = new JButton("Apply threshold level from text field");
+        sliderPanel.add(applyThresholdButton);
         sliderThreshType.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -97,12 +102,45 @@ public class Threshold {
             public void stateChanged(ChangeEvent e) {
                 JSlider source = (JSlider) e.getSource();
                 thresholdValue = source.getValue();
+                textField.setText(String.valueOf(thresholdValue));
                 update();
+            }
+        });
+        applyThresholdButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    int level = Integer.parseInt(textField.getText());
+                    if(level < 0 || level > 255){
+                        JOptionPane.showMessageDialog(null,
+                                "Please enter number bigger than 0 or smaller than 256", "Wrong threshold level",
+                                JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        thresholdValue = level;
+                        sliderThreshValue.setValue(level);
+                        update();
+                    }
+                } catch (NumberFormatException ex){
+                    JOptionPane.showMessageDialog(null, "Incorrect data type!\nPlease enter integer number.",
+                            "Wrong threshold level", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
         pane.add(sliderPanel, BorderLayout.PAGE_START);
         imgLabel = new JLabel(new ImageIcon(img));
         pane.add(imgLabel, BorderLayout.CENTER);
+        /*JButton showHistogramButton = new JButton("Show histogram");
+        sliderPanel.add(showHistogramButton);
+        showHistogramButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    new Histogram().display(FileService.matToBuffered(dst));
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }); */
     }
     private void update() {
         Imgproc.threshold(srcGray, dst, thresholdValue, MAX_BINARY_VALUE, thresholdType);
