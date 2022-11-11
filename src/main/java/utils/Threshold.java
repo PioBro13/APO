@@ -5,17 +5,10 @@ import java.awt.Container;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
-import nu.pattern.OpenCV;
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.highgui.HighGui;
 import org.opencv.imgcodecs.Imgcodecs;

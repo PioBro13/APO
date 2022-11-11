@@ -132,6 +132,7 @@ public class HistogramOperations {
         int[] LUT = new int[distribution.length];
         HistogramOperations.Pair minMax = findMinMax(distribution);
         double d0 = (Double)minMax.min;
+        ImageOperations.threshold(new Mat(),new Mat(),2,222,1);
 
         for(int i = 1; i < distribution.length; ++i) {
             LUT[i] = (int)(255.0D * ((distribution[i] - d0) / (1.0D - d0)));
