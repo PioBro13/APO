@@ -1,6 +1,5 @@
 package utils;
 
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -209,10 +208,10 @@ public class FileService {
 
     public static JSlider thresholdSlider(){
         JSlider jSlider = new JSlider(JSlider.HORIZONTAL, 0, 256, 0);
-        return getjSlider(jSlider);
+        return getSlider(jSlider);
     }
 
-    private static JSlider getjSlider(JSlider jSlider) {
+    private static JSlider getSlider(JSlider jSlider) {
         jSlider.setPaintTicks(true);
         jSlider.setMajorTickSpacing(25);
         jSlider.setMinorTickSpacing(5);
@@ -227,7 +226,7 @@ public class FileService {
 
     public static JSlider resizeSlider(){
         JSlider jSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
-        return getjSlider(jSlider);
+        return getSlider(jSlider);
     }
 
     public static BufferedImage rgbToGrayscale(BufferedImage bufferedImage){

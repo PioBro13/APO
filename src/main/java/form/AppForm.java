@@ -1,10 +1,7 @@
 package form;
 
 import org.opencv.core.Mat;
-import utils.FileService;
-import utils.Histogram;
-import utils.HistogramOperations;
-import utils.ImageOperations;
+import utils.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -94,21 +91,8 @@ public class AppForm extends JFrame{
         thresholdingButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    File file = openFile();
-                    int thresholdLevel = thresholdLevel();
+                new Threshold(openFile());
 
-                    if (thresholdLevel < -1 || thresholdLevel > 255) {
-                        JOptionPane.showMessageDialog(null, "Wrong threshold given!\nPlease enter number greater or equal than 0 and smaller or equal than 255",
-                                "Wrong threshold level", JOptionPane.ERROR_MESSAGE);
-                    }else if(thresholdLevel == -1){
-                        System.out.println("Wrong data type");
-                    }else{
-                        ImageOperations.pictureThresholding(file, thresholdLevel,isBinary());
-                    }
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
             }
         });
         equalizedHistogramButton.addActionListener(new ActionListener() {
