@@ -89,4 +89,16 @@ public class ImageOperations {
         return FileService.toBufferedImage(img);
     }
 
+    public static BufferedImage smoothingMedian(File image){
+        Mat src = Imgcodecs.imread(image.getAbsolutePath());
+        //Creating destination matrix
+        Mat dst = new Mat(src.rows(), src.cols(), src.type());
+        // Applying MedianBlur on the Image
+        Imgproc.medianBlur(src, dst, 5);
+        //Converting matrix to JavaFX writable image
+        Image img = HighGui.toBufferedImage(dst);
+
+        return FileService.toBufferedImage(img);
+    }
+
 }

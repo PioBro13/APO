@@ -133,7 +133,11 @@ public class AppForm extends JFrame{
         medianSmoothingButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                try {
+                    new Histogram().display(ImageOperations.smoothingMedian(openFile()));
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
     }
