@@ -21,6 +21,8 @@ public class AppForm extends JFrame{
     private JButton thresholdingButton;
     private JButton equalizedHistogramButton;
     private JButton stretchHistogramButton;
+    private JButton smoothingGaussianButton;
+    private JButton medianSmoothingButton;
     private File lastOpenedFile;
 
     public AppForm(String title){
@@ -116,6 +118,22 @@ public class AppForm extends JFrame{
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
+            }
+        });
+        smoothingGaussianButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    new Histogram().display(ImageOperations.smoothingGaussian(openFile()));
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+        medianSmoothingButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
             }
         });
     }
