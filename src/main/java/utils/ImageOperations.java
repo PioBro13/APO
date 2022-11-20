@@ -6,6 +6,7 @@ import org.opencv.highgui.HighGui;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -144,6 +145,27 @@ public class ImageOperations {
         }
 
         return result;
+    }
+
+    public static BufferedImage mergeImages(File firstImage, File secondImage) throws IOException {
+        BufferedImage image = FileService.imageToBuffered(firstImage);
+        BufferedImage overlay = FileService.imageToBuffered(secondImage);
+
+        // create the new image, canvas size is the max. of both image sizes
+        int w = Math.max(image.getWidth(), overlay.getWidth());
+        int h = Math.max(image.getHeight(), overlay.getHeight());
+        BufferedImage combined = new BufferedImage(w, h, image.getType());
+
+// paint both images, preserving the alpha channels
+        Graphics g = combined.getGraphics();
+        g.drawImage(image, 0, 0, null);
+        g.drawImage(overlay, 0, 0, null);
+
+        g.dispose();
+
+// Save as new image
+         return  combined;
+
     }
 
     public static BufferedImage substractImages(File firstImage, File secondImage) throws IOException {

@@ -115,6 +115,12 @@
         <properties/>
         <border type="none"/>
         <children>
+          <component id="4f39e" class="javax.swing.JButton" binding="mergeImagesButton">
+            <constraints/>
+            <properties>
+              <text value="Merge images"/>
+            </properties>
+          </component>
           <component id="2a8e9" class="javax.swing.JButton" binding="arithmeticOperations">
             <constraints/>
             <properties>

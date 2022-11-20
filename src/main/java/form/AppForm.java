@@ -25,6 +25,7 @@ public class AppForm extends JFrame{
     private JButton medianSmoothingButton;
     private JButton imagesSubstractButton;
     private JButton arithmeticOperations;
+    private JButton mergeImagesButton;
     private File lastOpenedFile;
 
     public AppForm(String title){
@@ -161,6 +162,16 @@ public class AppForm extends JFrame{
 
                 try {
                     FileService.openImage(ImageOperations.arithmeticOperation(openFile(),operation,value));
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        mergeImagesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    FileService.openImage(ImageOperations.mergeImages(openFile(),openFile()));
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
