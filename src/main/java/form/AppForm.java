@@ -23,6 +23,7 @@ public class AppForm extends JFrame{
     private JButton stretchHistogramButton;
     private JButton smoothingGaussianButton;
     private JButton medianSmoothingButton;
+    private JButton imagesSubstractButton;
     private File lastOpenedFile;
 
     public AppForm(String title){
@@ -137,6 +138,16 @@ public class AppForm extends JFrame{
                     new Histogram().display(ImageOperations.smoothingMedian(openFile()));
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
+                }
+            }
+        });
+        imagesSubstractButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    FileService.openImage(ImageOperations.substractImages(openFile(),openFile()));
+                } catch (IOException ex) {
+                    ex.printStackTrace();
                 }
             }
         });
