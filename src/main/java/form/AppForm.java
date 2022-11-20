@@ -24,6 +24,7 @@ public class AppForm extends JFrame{
     private JButton smoothingGaussianButton;
     private JButton medianSmoothingButton;
     private JButton imagesSubstractButton;
+    private JButton arithmeticOperations;
     private File lastOpenedFile;
 
     public AppForm(String title){
@@ -151,6 +152,20 @@ public class AppForm extends JFrame{
                 }
             }
         });
+        arithmeticOperations.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int value = arithmeticValue();
+                String operation = operationType();
+
+
+                try {
+                    FileService.openImage(ImageOperations.arithmeticOperation(openFile(),operation,value));
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
     }
 
     public File openFile(){
@@ -166,24 +181,30 @@ public class AppForm extends JFrame{
         }
     }
 
-    public int thresholdLevel(){
+    public int arithmeticValue(){
         int givenLevel = -1;
         try {
-             givenLevel = Integer.parseInt(JOptionPane.showInputDialog("Enter thresholding level"));
+             givenLevel = Integer.parseInt(JOptionPane.showInputDialog("Enter integer value"));
         } catch (NumberFormatException e){
             JOptionPane.showMessageDialog(null, "Incorrect data type!\nPlease enter integer number.",
-                    "Wrong threshold level", JOptionPane.ERROR_MESSAGE);
+                    "Wrong value", JOptionPane.ERROR_MESSAGE);
         }
         return givenLevel;
     }
 
-    public boolean isBinary(){
-        int n = JOptionPane.showConfirmDialog(
-                this,
-                "Do you want to make binary thresholding?",
-                "Binary thresholding",
-                JOptionPane.YES_NO_OPTION);
-        return n == 0;
+    public String operationType(){
+        JPanel panel = new JPanel();
+        panel.add(new JLabel("Please make a selection:"));
+        DefaultComboBoxModel model = new DefaultComboBoxModel();
+        model.addElement("Addition");
+        model.addElement("Division");
+        model.addElement("Multiplication");
+        JComboBox comboBox = new JComboBox(model);
+        panel.add(comboBox);
+
+        int result = JOptionPane.showConfirmDialog(null, panel, "Flavor", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+        System.out.println(result);
+        return comboBox.getSelectedItem().toString();
     }
 
 }

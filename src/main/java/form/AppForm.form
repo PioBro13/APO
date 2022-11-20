@@ -115,6 +115,12 @@
         <properties/>
         <border type="none"/>
         <children>
+          <component id="2a8e9" class="javax.swing.JButton" binding="arithmeticOperations">
+            <constraints/>
+            <properties>
+              <text value="Arithmetic Operations"/>
+            </properties>
+          </component>
           <component id="23ad1" class="javax.swing.JButton" binding="imagesSubstractButton">
             <constraints/>
             <properties>

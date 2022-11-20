@@ -101,6 +101,51 @@ public class ImageOperations {
         return FileService.toBufferedImage(img);
     }
 
+    public static BufferedImage arithmeticOperation(File image, String operation, int value) throws IOException {
+        BufferedImage buffImage = FileService.imageToBuffered(image);
+        BufferedImage result = new BufferedImage(buffImage.getWidth(),buffImage.getHeight(),buffImage.getType());
+        for(int x = 0; x < buffImage.getWidth(); x++){
+            for(int y = 0; y < buffImage.getHeight(); y++) {
+                int argb = buffImage.getRGB(x,y);
+                int a = (argb >> 24) & 0xFF;
+                int r = (argb >> 16) & 0xFF;
+                int g = (argb >>  8) & 0xFF;
+                int b = (argb      ) & 0xFF;
+                int aDiff = a;
+                int rDiff = b;
+                int gDiff = g;
+                int bDiff = b;
+
+                switch (operation){
+                    case "Addition":
+                        aDiff = (a + value);
+                        rDiff = (r + value);
+                        gDiff = (g + value);
+                        bDiff = (b + value);
+                        break;
+                    case "Division":
+                        aDiff = (a / value);
+                        rDiff = (r / value);
+                        gDiff = (g / value);
+                        bDiff = (b / value);
+                        break;
+                    case "Multiplication":
+                        aDiff = (a * value);
+                        rDiff = (r * value);
+                        gDiff = (g * value);
+                        bDiff = (b * value);
+                        break;
+                }
+                int diff =
+                        (aDiff << 24) | (rDiff << 16) | (gDiff << 8) | bDiff;
+                result.setRGB(x, y, diff);
+
+            }
+        }
+
+        return result;
+    }
+
     public static BufferedImage substractImages(File firstImage, File secondImage) throws IOException {
         BufferedImage image0 = FileService.imageToBuffered(firstImage);
         BufferedImage image1 = FileService.imageToBuffered(secondImage);
