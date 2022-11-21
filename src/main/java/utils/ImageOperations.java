@@ -117,25 +117,25 @@ public class ImageOperations {
                 int gDiff = g;
                 int bDiff = b;
 
-                switch (operation){
-                    case "Addition":
+                switch (operation) {
+                    case "Addition" -> {
                         aDiff = (a + value);
                         rDiff = (r + value);
                         gDiff = (g + value);
                         bDiff = (b + value);
-                        break;
-                    case "Division":
+                    }
+                    case "Division" -> {
                         aDiff = (a / value);
                         rDiff = (r / value);
                         gDiff = (g / value);
                         bDiff = (b / value);
-                        break;
-                    case "Multiplication":
+                    }
+                    case "Multiplication" -> {
                         aDiff = (a * value);
                         rDiff = (r * value);
                         gDiff = (g * value);
                         bDiff = (b * value);
-                        break;
+                    }
                 }
                 int diff =
                         (aDiff << 24) | (rDiff << 16) | (gDiff << 8) | bDiff;
