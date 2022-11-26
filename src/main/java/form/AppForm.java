@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 public class AppForm extends JFrame{
     private JPanel mainPanel;
@@ -26,6 +27,7 @@ public class AppForm extends JFrame{
     private JButton imagesSubstractButton;
     private JButton arithmeticOperations;
     private JButton mergeImagesButton;
+    private JButton logicalOperationsButton;
     private File lastOpenedFile;
 
     public AppForm(String title){
@@ -177,6 +179,21 @@ public class AppForm extends JFrame{
                 }
             }
         });
+        logicalOperationsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            File file = openFile();
+            String operation = logicOperationType();
+
+            if(Objects.equals(operation, "NOT")){
+                try {
+                    ImageOperations.negation(file);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+            }
+        });
     }
 
     public File openFile(){
@@ -210,6 +227,22 @@ public class AppForm extends JFrame{
         model.addElement("Addition");
         model.addElement("Division");
         model.addElement("Multiplication");
+        JComboBox comboBox = new JComboBox(model);
+        panel.add(comboBox);
+
+        int result = JOptionPane.showConfirmDialog(null, panel, "Flavor", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+        System.out.println(result);
+        return comboBox.getSelectedItem().toString();
+    }
+
+    public String logicOperationType(){
+        JPanel panel = new JPanel();
+        panel.add(new JLabel("Please make a selection:"));
+        DefaultComboBoxModel model = new DefaultComboBoxModel();
+        model.addElement("NOT");
+        model.addElement("AND");
+        model.addElement("OR");
+        model.addElement("XOR");
         JComboBox comboBox = new JComboBox(model);
         panel.add(comboBox);
 

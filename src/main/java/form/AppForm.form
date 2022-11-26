@@ -133,6 +133,12 @@
               <text value="Substract images"/>
             </properties>
           </component>
+          <component id="6b4d5" class="javax.swing.JButton" binding="logicalOperationsButton">
+            <constraints/>
+            <properties>
+              <text value="Logical Operations"/>
+            </properties>
+          </component>
         </children>
       </toolbar>
     </children>
