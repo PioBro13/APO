@@ -1,5 +1,6 @@
 package utils;
 
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -81,6 +82,21 @@ public class FileService {
     public static void saveFile(File image) throws IOException {
         Mat matrix = Imgcodecs.imread(image.getAbsolutePath());
         //Chooser to save file
+        saveFileCore(matrix);
+    }
+
+    public static void saveFile(BufferedImage image) throws IOException {
+        byte[] pixels = ((DataBufferByte) image.getRaster().getDataBuffer())
+                .getData();
+
+        // Create a Matrix the same size of image
+        Mat matrix = new Mat(image.getHeight(), image.getWidth(), CvType.CV_8UC3);
+        matrix.put(0,0,pixels);
+        //Chooser to save file
+        saveFileCore(matrix);
+    }
+
+    private static void saveFileCore(Mat matrix) {
         JFrame parentFrame = new JFrame();
         JFileChooser fileChooser = new JFileChooser("src/main/resources");
         fileChooser.setDialogTitle("Specify a file to save");

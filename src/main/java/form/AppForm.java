@@ -28,7 +28,10 @@ public class AppForm extends JFrame{
     private JButton arithmeticOperations;
     private JButton mergeImagesButton;
     private JButton logicalOperationsButton;
-    private File lastOpenedFile;
+    private JButton edgeDetectionButton;
+    private JButton prewittDetectionButton;
+    private JButton cannyDetectionButton;
+    private BufferedImage lastOpenedFile;
 
     public AppForm(String title){
         super(title);
@@ -41,7 +44,7 @@ public class AppForm extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 try {
                     File openedFile = openFile();
-                    lastOpenedFile = openedFile;
+                    lastOpenedFile = FileService.imageToBuffered(openedFile);
                     FileService.openImage(openedFile);
                 } catch (IOException ex) {
                     ex.printStackTrace();
@@ -187,11 +190,42 @@ public class AppForm extends JFrame{
 
             if(Objects.equals(operation, "NOT")){
                 try {
-                    ImageOperations.negation(file);
+                    lastOpenedFile = ImageOperations.negation(FileService.imageToBuffered(file));
+                    FileService.openImage(ImageOperations.negation(FileService.imageToBuffered(file)));
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
             }
+            }
+        });
+        edgeDetectionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    EdgeDetection.sobel(openFile());
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+        prewittDetectionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    EdgeDetection.prewitt(openFile());
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+        cannyDetectionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    EdgeDetection.canny(openFile());
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
     }

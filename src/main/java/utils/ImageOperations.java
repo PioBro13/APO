@@ -1,5 +1,6 @@
 package utils;
 
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
 import org.opencv.highgui.HighGui;
@@ -9,6 +10,7 @@ import org.opencv.imgproc.Imgproc;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.io.File;
 import java.io.IOException;
 
@@ -17,8 +19,13 @@ import static utils.FileService.openImage;
 
 public class ImageOperations {
 
-    public static void negation(File image) throws IOException {
-        Mat matrix = Imgcodecs.imread(image.getAbsolutePath());
+    public static BufferedImage negation(BufferedImage image) throws IOException {
+        byte[] pixels = ((DataBufferByte) image.getRaster().getDataBuffer())
+                .getData();
+
+        // Create a Matrix the same size of image
+        Mat matrix = new Mat(image.getHeight(), image.getWidth(), CvType.CV_8UC3);
+        matrix.put(0,0,pixels);
         double maxVal = 255.0D;
         int rows = matrix.rows();
         int cols = matrix.cols();
@@ -32,7 +39,7 @@ public class ImageOperations {
                 matrix.put(i, j, data);
             }
         }
-        openImage(matToBuffered(matrix));
+        return (matToBuffered(matrix));
     }
 
     public static void threshold(Mat src, Mat dst, double threshold, double maxval, int type) {
@@ -119,22 +126,22 @@ public class ImageOperations {
 
                 switch (operation) {
                     case "Addition" -> {
-                        aDiff = (a + value);
-                        rDiff = (r + value);
-                        gDiff = (g + value);
-                        bDiff = (b + value);
+                        aDiff = (a + value)%255;
+                        rDiff = (r + value)%255;
+                        gDiff = (g + value)%255;
+                        bDiff = (b + value)%255;
                     }
                     case "Division" -> {
-                        aDiff = (a / value);
-                        rDiff = (r / value);
-                        gDiff = (g / value);
-                        bDiff = (b / value);
+                        aDiff = (a / value)%255;
+                        rDiff = (r / value)%255;
+                        gDiff = (g / value)%255;
+                        bDiff = (b / value)%255;
                     }
                     case "Multiplication" -> {
-                        aDiff = (a * value);
-                        rDiff = (r * value);
-                        gDiff = (g * value);
-                        bDiff = (b * value);
+                        aDiff = (a * value)%255;
+                        rDiff = (r * value)%255;
+                        gDiff = (g * value)%255;
+                        bDiff = (b * value)%255;
                     }
                 }
                 int diff =
