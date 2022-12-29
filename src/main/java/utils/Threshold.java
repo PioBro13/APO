@@ -16,12 +16,12 @@ import org.opencv.imgproc.Imgproc;
 
 public class Threshold {
     private static int MAX_VALUE = 255;
-    private static int MAX_TYPE = 4;
+    private static int MAX_TYPE = 5;
     private static int MAX_BINARY_VALUE = 255;
     private static final String WINDOW_NAME = "Threshold Demo";
     private static final String TRACKBAR_TYPE = "<html><body>Type: <br> 0: Binary <br> "
             + "1: Binary Inverted <br> 2: Truncate <br> "
-            + "3: To Zero <br> 4: To Zero Inverted</body></html>";
+            + "3: To Zero <br> 4: To Zero Inverted <br> 5: Otsu</body></html>";
     private static final String TRACKBAR_VALUE = "Value";
     private int thresholdValue = 0;
     private int thresholdType = 3;
@@ -128,7 +128,7 @@ public class Threshold {
             @Override
             public void actionPerformed(ActionEvent e) {
                 isAdaptive = checkBox.isSelected();
-
+                update(isAdaptive);
             }
         });
         pane.add(sliderPanel, BorderLayout.PAGE_START);
@@ -152,8 +152,10 @@ public class Threshold {
             Imgproc.adaptiveThreshold(srcGray, dst, thresholdValue,
                     Imgproc.ADAPTIVE_THRESH_MEAN_C,
                     Imgproc.THRESH_BINARY, 11, 12);
-        }else{
+        }else if(thresholdType < 5){
             Imgproc.threshold(srcGray, dst, thresholdValue, MAX_BINARY_VALUE, thresholdType);
+        }else{
+            Imgproc.threshold(srcGray, dst, thresholdValue, MAX_BINARY_VALUE,  Imgproc.THRESH_OTSU);
         }
 
         Image img = HighGui.toBufferedImage(dst);
