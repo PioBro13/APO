@@ -30,6 +30,9 @@ public class Threshold {
     private Mat dst = new Mat();
     private JFrame frame;
     private JLabel imgLabel;
+    private boolean isAdaptive = false;
+
+
     public Threshold(File image) {
 
         String imagePath = image.getAbsolutePath();
@@ -82,12 +85,14 @@ public class Threshold {
         sliderPanel.add(textField);
         JButton applyThresholdButton = new JButton("Apply threshold level from text field");
         sliderPanel.add(applyThresholdButton);
+        JCheckBox checkBox = new JCheckBox("Adaptive threshold");
+        sliderPanel.add(checkBox);
         sliderThreshType.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
                 JSlider source = (JSlider) e.getSource();
                 thresholdType = source.getValue();
-                update();
+                update(isAdaptive);
             }
         });
         sliderThreshValue.addChangeListener(new ChangeListener() {
@@ -96,7 +101,7 @@ public class Threshold {
                 JSlider source = (JSlider) e.getSource();
                 thresholdValue = source.getValue();
                 textField.setText(String.valueOf(thresholdValue));
-                update();
+                update(isAdaptive);
             }
         });
         applyThresholdButton.addActionListener(new ActionListener() {
@@ -111,12 +116,19 @@ public class Threshold {
                     } else {
                         thresholdValue = level;
                         sliderThreshValue.setValue(level);
-                        update();
+                        update(isAdaptive);
                     }
                 } catch (NumberFormatException ex){
                     JOptionPane.showMessageDialog(null, "Incorrect data type!\nPlease enter integer number.",
                             "Wrong threshold level", JOptionPane.ERROR_MESSAGE);
                 }
+            }
+        });
+        checkBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                isAdaptive = checkBox.isSelected();
+
             }
         });
         pane.add(sliderPanel, BorderLayout.PAGE_START);
@@ -135,8 +147,15 @@ public class Threshold {
             }
         }); */
     }
-    private void update() {
-        Imgproc.threshold(srcGray, dst, thresholdValue, MAX_BINARY_VALUE, thresholdType);
+    private void update(boolean adaptive) {
+        if (adaptive){
+            Imgproc.adaptiveThreshold(srcGray, dst, thresholdValue,
+                    Imgproc.ADAPTIVE_THRESH_MEAN_C,
+                    Imgproc.THRESH_BINARY, 11, 12);
+        }else{
+            Imgproc.threshold(srcGray, dst, thresholdValue, MAX_BINARY_VALUE, thresholdType);
+        }
+
         Image img = HighGui.toBufferedImage(dst);
         imgLabel.setIcon(new ImageIcon(img));
         frame.repaint();
