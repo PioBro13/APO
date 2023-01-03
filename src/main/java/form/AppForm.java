@@ -31,6 +31,7 @@ public class AppForm extends JFrame{
     private JButton edgeDetectionButton;
     private JButton prewittDetectionButton;
     private JButton cannyDetectionButton;
+    private JButton morphologyButton;
     private BufferedImage lastOpenedFile;
 
     public AppForm(String title){
@@ -226,6 +227,13 @@ public class AppForm extends JFrame{
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
+            }
+        });
+        morphologyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new MorphologyOperations(openFile());
+
             }
         });
     }
