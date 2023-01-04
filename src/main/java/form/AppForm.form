@@ -92,16 +92,22 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="e794c" class="javax.swing.JButton" binding="smoothingGaussianButton">
+          <component id="e4754" class="javax.swing.JButton" binding="smoothingButton">
             <constraints/>
             <properties>
-              <text value="Gaussian smoothing"/>
+              <text value="Smoothing"/>
             </properties>
           </component>
-          <component id="64521" class="javax.swing.JButton" binding="medianSmoothingButton">
+          <component id="f4e7" class="javax.swing.JButton" binding="sobelButton">
             <constraints/>
             <properties>
-              <text value="Median smoothing"/>
+              <text value="Sobel"/>
+            </properties>
+          </component>
+          <component id="9de8e" class="javax.swing.JButton" binding="medianButton" default-binding="true">
+            <constraints/>
+            <properties>
+              <text value="Median"/>
             </properties>
           </component>
         </children>

@@ -10,7 +10,7 @@ public class Main {
         OpenCV.loadLocally();
         JFrame form = new AppForm("APO Project");
         form.setVisible(true);
-        form.setSize(500,300);
+        form.setSize(700,500);
 
     }
 

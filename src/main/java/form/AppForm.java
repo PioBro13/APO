@@ -22,8 +22,7 @@ public class AppForm extends JFrame{
     private JButton thresholdingButton;
     private JButton equalizedHistogramButton;
     private JButton stretchHistogramButton;
-    private JButton smoothingGaussianButton;
-    private JButton medianSmoothingButton;
+
     private JButton imagesSubstractButton;
     private JButton arithmeticOperations;
     private JButton mergeImagesButton;
@@ -32,6 +31,9 @@ public class AppForm extends JFrame{
     private JButton prewittDetectionButton;
     private JButton cannyDetectionButton;
     private JButton morphologyButton;
+    private JButton smoothingButton;
+    private JButton sobelButton;
+    private JButton medianButton;
     private BufferedImage lastOpenedFile;
 
     public AppForm(String title){
@@ -129,26 +131,6 @@ public class AppForm extends JFrame{
                 }
             }
         });
-        smoothingGaussianButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    new Histogram().display(ImageOperations.smoothingGaussian(openFile()));
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        });
-        medianSmoothingButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    new Histogram().display(ImageOperations.smoothingMedian(openFile()));
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        });
         imagesSubstractButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -234,6 +216,12 @@ public class AppForm extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 new MorphologyOperations(openFile());
 
+            }
+        });
+        smoothingButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Smoothing(openFile());
             }
         });
     }
