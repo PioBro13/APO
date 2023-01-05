@@ -224,6 +224,12 @@ public class AppForm extends JFrame{
                 new Smoothing(openFile());
             }
         });
+        medianButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Median(openFile());
+            }
+        });
     }
 
     public File openFile(){
