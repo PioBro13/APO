@@ -9,29 +9,28 @@ import java.io.File;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import org.opencv.core.Core;
-import org.opencv.core.Mat;
-import org.opencv.core.Point;
-import org.opencv.core.Size;
+
+import org.opencv.core.*;
 import org.opencv.highgui.HighGui;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
-public class Sobel {
-    private static final String[] ELEMENT_TYPE = { "Blur", "Gaussian" };
+public class Sharpening {
+    private static final String[]  MASKS = { "3x3", "5x5", "7x7" ,"9x9" };
     private static final String[] BORDERS = { "Constant", "Reflect", "Wrap"};
     private int borderType;
 
     private Mat matImgSrc;
+    private Mat matAfterMed = new Mat();
     private Mat matImgDst = new Mat();
     private int kernelSize = 0;
-    private int smoothingType;
+    int top, bottom, left, right;
     private JFrame frame;
     private JLabel imgLabel;
-    public Sobel(File image) {
+    public Sharpening(File image) {
         String imagePath = image.getAbsolutePath();
         matImgSrc = Imgcodecs.imread(imagePath);
         // Create and set up the window.
-        frame = new JFrame("Sobel direction");
+        frame = new JFrame("Median operation");
         // Set up the content pane.
         Image img = HighGui.toBufferedImage(matImgSrc);
         addComponentsToPane(frame.getContentPane(), img);
@@ -48,14 +47,19 @@ public class Sobel {
         }
         JPanel sliderPanel = new JPanel();
         sliderPanel.setLayout(new BoxLayout(sliderPanel, BoxLayout.PAGE_AXIS));
-        sliderPanel.add(new JLabel("Smoothing type:"));
-        JComboBox<String> elementTypeBox = new JComboBox<>(ELEMENT_TYPE);
+        sliderPanel.add(new JLabel("Kernel size:"));
+        JComboBox<String> elementTypeBox = new JComboBox<>(MASKS);
         elementTypeBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 @SuppressWarnings("unchecked")
                 JComboBox<String> cb = (JComboBox<String>)e.getSource();
-                smoothingType = cb.getSelectedIndex();
+                switch (cb.getSelectedIndex()){
+                    case(0) -> kernelSize = 3;
+                    case(1) -> kernelSize = 5;
+                    case(2) -> kernelSize = 7;
+                    case(3) -> kernelSize = 9;
+                }
                 update();
             }
         });
@@ -70,15 +74,7 @@ public class Sobel {
                 switch (cb.getSelectedIndex()){
                     case(0) -> borderType = Core.BORDER_CONSTANT;
                     case(1) -> borderType = Core.BORDER_REFLECT;
-                    case (2) -> {
-                        if(smoothingType != 1){
-                            JOptionPane.showMessageDialog(null,
-                                    "You can't use wrap border in this operation", "Wrong border type",
-                                    JOptionPane.ERROR_MESSAGE);
-                        }else{
-                            borderType = Core.BORDER_WRAP;
-                        };
-                    }
+                    case (2) -> borderType = Core.BORDER_WRAP;
                 }
 
                 update();
@@ -90,11 +86,10 @@ public class Sobel {
         pane.add(imgLabel, BorderLayout.CENTER);
     }
     private void update() {
-        switch (smoothingType) {
-            case (0) -> Imgproc.Sobel(matImgSrc, matImgDst, -1, 1,0);
-            case (1) -> Imgproc.GaussianBlur(matImgSrc, matImgDst, new Size(3, 3), 0, 0,borderType);
-        }
-
+        top = (int) (0.05*matImgSrc.rows()); bottom = top;
+        left = (int) (0.05*matImgSrc.cols()); right = left;
+        Imgproc.medianBlur(matImgSrc, matAfterMed, kernelSize);
+        Core.copyMakeBorder( matAfterMed, matImgDst, top, bottom, left, right, borderType, new Scalar(0));
         Image img = HighGui.toBufferedImage(matImgDst);
         imgLabel.setIcon(new ImageIcon(img));
         frame.repaint();

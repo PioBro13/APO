@@ -51,10 +51,28 @@ public class EdgeDetection {
     }
 
     public static void prewitt(File image) throws IOException {
-        double[][] filter_Prewit_mx = { { 1.0, 0, -1.0 }, { 1.0, 0, -1.0 }, { 1.0, 0, -1.0 } };
-        Image img = filter(filter_Prewit_mx, image);
-        BufferedImage bImage = ImageIO.read((ImageInputStream) img);
-        FileService.openImage(bImage);
+        Mat src = FileService.BufferedImage2Mat(FileService.imageToBuffered(image));
+        Mat dst = new Mat();
+        int kernelSize = 3;
+        Mat kernel = new Mat(kernelSize,kernelSize, CvType.CV_32F){
+            {
+                put(0,0,1);
+                put(0,1,1);
+                put(0,2,-1);
+
+                put(1,0,1);
+                put(1,1,0);
+                put(1,2,-1);
+
+                put(2,0,1);
+                put(2,1,0);
+                put(2,2,-1); // Leave it this way - don't uncomment
+            }
+        };
+
+        Imgproc.filter2D(src,dst,-1,kernel);
+
+        FileService.openImage(FileService.matToBuffered(dst));
     }
 
     public static void canny(File image) throws IOException {

@@ -98,6 +98,12 @@
               <text value="Smoothing"/>
             </properties>
           </component>
+          <component id="fdfb8" class="javax.swing.JButton" binding="sharpeningButton" default-binding="true">
+            <constraints/>
+            <properties>
+              <text value="Sharpening"/>
+            </properties>
+          </component>
           <component id="f4e7" class="javax.swing.JButton" binding="sobelButton">
             <constraints/>
             <properties>

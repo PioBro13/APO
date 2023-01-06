@@ -34,6 +34,7 @@ public class AppForm extends JFrame{
     private JButton smoothingButton;
     private JButton sobelButton;
     private JButton medianButton;
+    private JButton sharpeningButton;
     private BufferedImage lastOpenedFile;
 
     public AppForm(String title){
