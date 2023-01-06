@@ -48,7 +48,7 @@ public class Sharpening {
         }
         JPanel sliderPanel = new JPanel();
         sliderPanel.setLayout(new BoxLayout(sliderPanel, BoxLayout.PAGE_AXIS));
-        sliderPanel.add(new JLabel("Kernel size:"));
+        sliderPanel.add(new JLabel("Choose K mask:"));
         JComboBox<String> elementTypeBox = new JComboBox<>(MASKS);
         elementTypeBox.addActionListener(new ActionListener() {
             @Override

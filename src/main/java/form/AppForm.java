@@ -237,6 +237,12 @@ public class AppForm extends JFrame{
                 new Sharpening(openFile());
             }
         });
+        sobelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Sobel(openFile());
+            }
+        });
     }
 
     public File openFile(){
