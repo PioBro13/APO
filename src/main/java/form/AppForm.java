@@ -231,6 +231,12 @@ public class AppForm extends JFrame{
                 new Median(openFile());
             }
         });
+        sharpeningButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Sharpening(openFile());
+            }
+        });
     }
 
     public File openFile(){
