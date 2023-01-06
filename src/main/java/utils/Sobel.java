@@ -16,11 +16,11 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 public class Sobel {
     private static final String[]  MASKS = { "E", "SE", "SW","W","NW","N","NE" };
-
+    private static final String[] BORDERS = { "Constant", "Reflect", "Wrap"};
     private int borderType;
 
     private Mat matImgSrc;
-    private Mat matAfterMed = new Mat();
+    private Mat matAfterSob = new Mat();
     private Mat matImgDst = new Mat();
     private Mat kernel;
     private int kernelSize = 3;
@@ -198,12 +198,32 @@ public class Sobel {
             }
         });
         sliderPanel.add(elementTypeBox);
+        sliderPanel.add(new JLabel("Broder type:"));
+        JComboBox<String> borderTypeBox = new JComboBox<>(BORDERS);
+        borderTypeBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                @SuppressWarnings("unchecked")
+                JComboBox<String> cb = (JComboBox<String>)e.getSource();
+                switch (cb.getSelectedIndex()){
+                    case(0) -> borderType = Core.BORDER_CONSTANT;
+                    case(1) -> borderType = Core.BORDER_REFLECT;
+                    case (2) -> borderType = Core.BORDER_WRAP;
+                }
+
+                update();
+            }
+        });
+        sliderPanel.add(borderTypeBox);
         pane.add(sliderPanel, BorderLayout.PAGE_START);
         imgLabel = new JLabel(new ImageIcon(img));
         pane.add(imgLabel, BorderLayout.CENTER);
     }
     private void update() {
-        Imgproc.filter2D(matImgSrc,matImgDst,-1,kernel);
+        top = (int) (0.05*matImgSrc.rows()); bottom = top;
+        left = (int) (0.05*matImgSrc.cols()); right = left;
+        Imgproc.filter2D(matImgSrc,matAfterSob,-1,kernel);
+        Core.copyMakeBorder( matAfterSob, matImgDst, top, bottom, left, right, borderType, new Scalar(0));
         Image img = HighGui.toBufferedImage(matImgDst);
         imgLabel.setIcon(new ImageIcon(img));
         frame.repaint();
