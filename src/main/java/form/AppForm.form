@@ -245,6 +245,12 @@
               <text value="Morphology"/>
             </properties>
           </component>
+          <component id="3d216" class="javax.swing.JButton" binding="contoursCalculationButton" default-binding="true">
+            <constraints/>
+            <properties>
+              <text value="Contours Calculation"/>
+            </properties>
+          </component>
         </children>
       </toolbar>
     </children>

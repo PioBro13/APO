@@ -35,6 +35,7 @@ public class AppForm extends JFrame{
     private JButton sobelButton;
     private JButton medianButton;
     private JButton sharpeningButton;
+    private JButton contoursCalculationButton;
     private BufferedImage lastOpenedFile;
 
     public AppForm(String title){
@@ -241,6 +242,12 @@ public class AppForm extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 new Sobel(openFile());
+            }
+        });
+        contoursCalculationButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new MomentsCalculation(openFile());
             }
         });
     }
