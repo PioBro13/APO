@@ -46,18 +46,6 @@
               <text value="Histogram"/>
             </properties>
           </component>
-          <component id="80c27" class="javax.swing.JButton" binding="negationButton">
-            <constraints/>
-            <properties>
-              <text value="Negation"/>
-            </properties>
-          </component>
-          <component id="5def0" class="javax.swing.JButton" binding="thresholdingButton">
-            <constraints/>
-            <properties>
-              <text value="Thresholding"/>
-            </properties>
-          </component>
         </children>
       </toolbar>
       <toolbar id="2fbed">
@@ -69,6 +57,18 @@
         <properties/>
         <border type="none"/>
         <children>
+          <component id="5def0" class="javax.swing.JButton" binding="thresholdingButton">
+            <constraints/>
+            <properties>
+              <text value="Thresholding"/>
+            </properties>
+          </component>
+          <component id="80c27" class="javax.swing.JButton" binding="negationButton">
+            <constraints/>
+            <properties>
+              <text value="Negation"/>
+            </properties>
+          </component>
           <component id="8d364" class="javax.swing.JButton" binding="equalizedHistogramButton">
             <constraints/>
             <properties>
