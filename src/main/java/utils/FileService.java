@@ -28,24 +28,13 @@ public class FileService {
         //Instantiate JFrame
         JFrame frame = new JFrame();
         frame.setLayout(new FlowLayout(FlowLayout.CENTER));
-        JSlider jSlider = resizeSlider();
         JLabel shownImage = new JLabel(new ImageIcon(bufImage));
         //Set Content to the JFrame
-        frame.getContentPane().add(jSlider);
+
         frame.getContentPane().add(shownImage);
         frame.pack();
         frame.setVisible(true);
         System.out.println("Image Loaded");
-        jSlider.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                System.out.println("Slider1: " + jSlider.getValue());
-              /*  try {
-                   bufImage =  ImageOperations.resizeImage(bufImage, jSlider.getValue());
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                } */
-            }
-        });
     }
 
     public static void openImage(BufferedImage image) throws IOException {

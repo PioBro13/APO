@@ -21,7 +21,6 @@ public class AppForm extends JFrame{
     private JButton negationButton;
     private JButton thresholdingButton;
     private JButton equalizedHistogramButton;
-    private JButton stretchHistogramButton;
 
     private JButton imagesSubstractButton;
     private JButton arithmeticOperations;
@@ -97,7 +96,8 @@ public class AppForm extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    ImageOperations.negation(lastOpenedFile);
+                    BufferedImage file = ImageOperations.negation(lastOpenedFile);
+                    FileService.openImage(file);
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -116,18 +116,6 @@ public class AppForm extends JFrame{
                     File file = openFile();
                     BufferedImage equalizedImage = HistogramOperations.histogramEqualize(file);
                     new Histogram().display(equalizedImage);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
-        stretchHistogramButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    File file = openFile();
-                    Mat stretchedMat = HistogramOperations.histogramStretch(file);
-                    new Histogram().display(FileService.matToBuffered(stretchedMat),FileService.tableLUT(stretchedMat));
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
